@@ -23,6 +23,11 @@ type Article struct {
 	Created  time.Time `json:"created,omitempty" bson:"created,omitempty"`
 }
 
+func main() {
+	connect()
+	handleRequest()
+}
+
 var client *mongo.Client
 
 // Connecting with the database (MongoDB)
@@ -45,6 +50,20 @@ func connect() {
 		log.Println("Connected to MondoDB Server")
 	}
 
+}
+
+// function for handling the request from the client.
+func handleRequest() {
+
+	http.HandleFunc("/", homePage)
+	http.HandleFunc("/articles", returnAllArticles)
+	http.HandleFunc("/articles/", returnSingleArticle)
+	http.HandleFunc("/articles/search", returnSearchResult)
+
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe", err)
+	}
 }
 
 // Home Page
@@ -158,23 +177,4 @@ func insertArticle(article Article) {
 		log.Fatal(err)
 	}
 	fmt.Println("Inserted post with ID:", insertResult.InsertedID)
-}
-
-// function for handling the request from the client.
-func handleRequest() {
-
-	http.HandleFunc("/", homePage)
-	http.HandleFunc("/articles", returnAllArticles)
-	http.HandleFunc("/articles/", returnSingleArticle)
-	http.HandleFunc("/articles/search", returnSearchResult)
-
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		log.Fatal("ListenAndServe", err)
-	}
-}
-
-func main() {
-	connect()
-	handleRequest()
 }
