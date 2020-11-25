@@ -33,7 +33,7 @@ var client *mongo.Client
 // Connecting with the database (MongoDB)
 func connect() {
 
-	clientOptions := options.Client().ApplyURI("mongodb://himsngh:H22imanshu04@goapicluster-shard-00-00.2usbp.mongodb.net:27017,goapicluster-shard-00-01.2usbp.mongodb.net:27017,goapicluster-shard-00-02.2usbp.mongodb.net:27017/test?ssl=true&replicaSet=atlas-b5saj8-shard-0&authSource=admin&retryWrites=true&w=majority")
+	clientOptions := options.Client().ApplyURI("mondodb_url")
 	client, _ = mongo.NewClient(clientOptions)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
